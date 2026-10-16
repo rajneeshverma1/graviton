@@ -1,69 +1,59 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import React from "react";
+import { Header } from "@/components/Header";
+import { Bio } from "@/components/Bio";
+import { WorkSection } from "@/components/WorkSection";
+import { ProjectsSection } from "@/components/ProjectsSection";
+import { ClientWorkSection } from "@/components/ClientWorkSection";
+import { OffScreenSection } from "@/components/OffScreenSection";
+import { OpenSourceSection } from "@/components/OpenSourceSection";
+import { SkillsSection } from "@/components/SkillsSection";
+import { HackathonsSection } from "@/components/HackathonsSection";
+import { EducationSection } from "@/components/EducationSection";
+import { GitHubGraph } from "@/components/GitHubGraph";
+import { BlogSection } from "@/components/BlogSection";
+import { ContactSection } from "@/components/ContactSection";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="container">
+      {/* Top Header with Mascot & Live Lucknow Time */}
+      <Header />
+
+      {/* Editorial Bio with bold accents & inline links */}
+      <Bio />
+
+      {/* Experience (Work Experience) */}
+      <WorkSection />
+
+      {/* Projects (Personal Flagship AI & SaaS) */}
+      <ProjectsSection />
+
+      {/* Client Work & Exits (Sold Commercial Projects) */}
+      <ClientWorkSection />
+
+      {/* Off screen (Life & Hobbies) */}
+      <OffScreenSection />
+
+      {/* Open Source Contributions */}
+      <OpenSourceSection />
+
+      {/* Skills & Tech Stack */}
+      <SkillsSection />
+
+      {/* Hackathons & Competitions */}
+      <HackathonsSection />
+
+      {/* Education & Cohorts */}
+      <EducationSection />
+
+      {/* GitHub 481 Contributions Heatmap */}
+      <GitHubGraph />
+
+      {/* My thoughts on ... everything (Blog) */}
+      <BlogSection />
+
+      {/* Hook with me, Gita quote, Footer */}
+      <ContactSection />
+    </main>
   );
 }
