@@ -380,7 +380,9 @@ export function GitHubGraph() {
                           ? "var(--gh-l3)"
                           : "var(--gh-l4)";
 
-                      const formattedDate = new Date(day.date).toLocaleDateString("en-US", {
+                      const [yStr, mStr, dStr] = day.date.split("-");
+                      const dateObj = new Date(Number(yStr), Number(mStr) - 1, Number(dStr));
+                      const formattedDate = dateObj.toLocaleDateString("en-US", {
                         weekday: "long",
                         month: "short",
                         day: "numeric",
