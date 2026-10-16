@@ -303,17 +303,10 @@ export const portfolioData = {
     },
     {
       id: "formal",
-      title: "Formal",
-      caption: "Formal Look · Suited Up",
+      title: "that's me",
+      caption: "Rajneesh Verma · That's Me",
       src: "/images/formal.jpeg",
-      alt: "Formal photo of Rajneesh"
-    },
-    {
-      id: "justaphoto",
-      title: "Just a photo",
-      caption: "Snapshot · Just a Photo",
-      src: "/images/justaphoto.jpeg",
-      alt: "Photo of Rajneesh"
+      alt: "Rajneesh Verma"
     }
   ],
 
