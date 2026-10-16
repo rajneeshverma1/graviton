@@ -274,11 +274,11 @@ export const portfolioData = {
 
   offScreen: [
     {
-      id: "university",
-      title: "Campus Life",
-      caption: "University Campus · SRMU Lucknow",
-      src: "/images/university.jpeg",
-      alt: "Rajneesh at university campus"
+      id: "formal",
+      title: "that's me",
+      caption: "Rajneesh Verma · That's Me",
+      src: "/images/formal.jpeg",
+      alt: "Rajneesh Verma"
     },
     {
       id: "setup",
@@ -295,18 +295,18 @@ export const portfolioData = {
       alt: "MacBook with code open at ambient cafe"
     },
     {
+      id: "university",
+      title: "Campus Life",
+      caption: "University Campus · SRMU Lucknow",
+      src: "/images/university.jpeg",
+      alt: "Rajneesh at university campus"
+    },
+    {
       id: "nature",
       title: "this is how i spend my evening",
       caption: "Nature Walks · Evening Countryside Sunset",
       src: "/images/thatscoolnature.jpeg",
       alt: "Scenic sunset over green countryside fields"
-    },
-    {
-      id: "formal",
-      title: "that's me",
-      caption: "Rajneesh Verma · That's Me",
-      src: "/images/formal.jpeg",
-      alt: "Rajneesh Verma"
     }
   ],
 
