@@ -483,3 +483,9 @@ button {
   animation: mascotLookAround 5.2s infinite ease-in-out;
 }
 
+@media (max-width: 640px) {
+  .offscreen-row {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+

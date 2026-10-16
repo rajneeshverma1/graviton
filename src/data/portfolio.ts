@@ -302,11 +302,18 @@ export const portfolioData = {
       alt: "Scenic sunset over green countryside fields"
     },
     {
-      id: "balcony",
-      title: "Out of Room",
-      caption: "Night Balcony · Quiet City Skyline Lights",
-      src: "/images/outofroom.jpeg",
-      alt: "Night view of residential towers from room balcony"
+      id: "formal",
+      title: "Formal",
+      caption: "Formal Look · Suited Up",
+      src: "/images/formal.jpeg",
+      alt: "Formal photo of Rajneesh"
+    },
+    {
+      id: "justaphoto",
+      title: "Just a photo",
+      caption: "Snapshot · Just a Photo",
+      src: "/images/justaphoto.jpeg",
+      alt: "Photo of Rajneesh"
     }
   ],
 
