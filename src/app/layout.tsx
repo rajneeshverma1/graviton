@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rajneeshportfolio.vercel.app"),
   title: "Rajneesh — Software Engineer & Tinkerer",
   description:
-    "20 y/o tech enthusiast, OS contributor, hobbyist developer and tinkerer from Lucknow, India. Software Engineer at Sidekick (YC P26) and Backend AI Engineer at Flyrank AI.",
+    "21 y/o tech enthusiast, OS contributor, hobbyist developer and tinkerer from Lucknow, India. Software Engineer at Sidekick (YC P26) and Backend AI Engineer at Flyrank AI.",
   keywords: [
     "Rajneesh",
     "Rajneesh Verma",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Rajneesh — Software Engineer & Tinkerer",
     description:
-      "20 y/o tech enthusiast, OS contributor, hobbyist developer and tinkerer from Lucknow, India.",
+      "21 y/o tech enthusiast, OS contributor, hobbyist developer and tinkerer from Lucknow, India.",
     type: "website",
     locale: "en_US",
   },
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rajneesh — Software Engineer & Tinkerer",
     description:
-      "20 y/o tech enthusiast, OS contributor, hobbyist developer and tinkerer from Lucknow, India.",
+      "21 y/o tech enthusiast, OS contributor, hobbyist developer and tinkerer from Lucknow, India.",
     creator: "@Rajneeshvermaa",
   },
 };
