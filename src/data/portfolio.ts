@@ -65,7 +65,7 @@ export const portfolioData = {
   fullName: "Rajneesh Verma",
   badge: "Available for work",
   role: "Software Engineer & Tinkerer",
-  age: "20 y/o",
+  age: "21 y/o",
   location: "Lucknow, India",
   timezone: "Asia/Kolkata",
   resumeUrl: "https://drive.google.com/file/d/1Lx9EBoJcft7coaYpvnWsNiHkDkBrc0z_/view?usp=sharing",

@@ -5,11 +5,9 @@ export function Bio() {
   return (
     <section className="prose" style={{ marginBottom: "2rem" }}>
       <p style={{ marginBottom: "0.875rem" }}>
-        I&apos;m a <strong>21-year-old tinkerer</strong> &amp; <strong>Software Engineer</strong> who enjoys{" "}
-        <strong>turning ideas into products</strong>, taking ownership from the
-        first concept and <strong>user experience</strong> to the{" "}
-        <strong>code and backend</strong> that bring it all together. Currently
-        building{" "}
+        I&apos;m a <strong>21-year-old Software Engineer &amp; tinkerer</strong> from{" "}
+        <strong>{portfolioData.location}</strong> who loves turning ideas into products—from concept and UX to backend code.
+        Currently building{" "}
         <a
           href="https://maticstudio.site/"
           target="_blank"
@@ -24,16 +22,9 @@ export function Bio() {
           rel="noopener noreferrer"
         >
           Collectly AI
-        </a>{" "}
-        go check them out and let me know what you think.
-      </p>
-
-      <p style={{ marginBottom: "0.875rem" }}>
-        Tech stack isn&apos;t my concern, I&apos;m{" "}
-        <strong>flexible with whatever the project needs</strong>. 21 year old tinkerer from{" "}
-        <strong>{portfolioData.location}</strong>, currently obsessed shipping/building with{" "}
-        <strong>Cursor</strong> and <strong>Claude</strong>, prefer working in an IDE, and I&apos;m also
-        hustling to become a <strong>better developer</strong> without relying too heavily on AI.
+        </a>
+        . Flexible with any tech stack, obsessed with shipping fast using{" "}
+        <strong>Cursor</strong> &amp; <strong>Claude</strong>, and constantly hustling to become a better developer.
       </p>
 
       <p>
