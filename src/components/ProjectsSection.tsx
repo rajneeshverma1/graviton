@@ -32,6 +32,7 @@ export function ProjectsSection() {
           return (
             <div
               key={project.id}
+              className="portfolio-row-container"
               style={{
                 borderRadius: "var(--radius-sm)",
                 transition: "var(--transition)",
@@ -42,112 +43,87 @@ export function ProjectsSection() {
               }}
             >
               {/* Row Header */}
-              <div
-                className={isExpanded ? "" : "hover-row"}
-                style={{
-                  padding: "0.18rem 0.5rem",
-                  display: "flex",
-                  alignItems: "baseline",
-                  justifyContent: "space-between",
-                  gap: "1.25rem",
-                }}
-              >
-                {/* Left: Clickable Project Name · Tagline */}
-                <div
-                  style={{
-                    fontSize: "0.875rem",
-                    color: "var(--fg-muted)",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    flex: "0 1 auto",
-                    fontWeight: 300,
-                    lineHeight: 1.5,
-                  }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggleExpand(project.id)}
-                    aria-expanded={isExpanded}
-                    title="Click to view project details"
-                    style={{
-                      background: "none",
-                      border: "none",
-                      padding: 0,
-                      margin: 0,
-                      font: "inherit",
-                      cursor: "pointer",
-                      textAlign: "left",
-                      display: "inline",
-                      color: "inherit",
-                    }}
-                  >
-                    <strong
+              <div className={`portfolio-row-header ${isExpanded ? "" : "hover-row"}`}>
+                <div className="portfolio-row-top">
+                  <div className="portfolio-row-main">
+                    <button
+                      type="button"
+                      onClick={() => toggleExpand(project.id)}
+                      aria-expanded={isExpanded}
+                      title="Click to view project details"
                       style={{
-                        color: isExpanded ? "var(--accent)" : "var(--fg-strong)",
-                        fontWeight: 500,
-                        textDecoration: "underline",
-                        textDecorationColor: isExpanded ? "var(--accent)" : "transparent",
-                        textUnderlineOffset: "3px",
-                        transition: "color 0.15s ease, text-decoration-color 0.15s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isExpanded) {
-                          e.currentTarget.style.color = "var(--accent)";
-                          e.currentTarget.style.textDecorationColor = "var(--accent)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isExpanded) {
-                          e.currentTarget.style.color = "var(--fg-strong)";
-                          e.currentTarget.style.textDecorationColor = "transparent";
-                        }
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        margin: 0,
+                        font: "inherit",
+                        cursor: "pointer",
+                        textAlign: "left",
+                        display: "inline",
+                        color: "inherit",
                       }}
                     >
-                      {project.name}
-                    </strong>
-                  </button>
-                  <span style={{ color: "var(--fg-subtle)", margin: "0 0.35rem" }}>
-                    ·
-                  </span>
-                  <span style={{ color: "var(--fg-muted)" }}>
-                    {project.tagline}
-                  </span>
+                      <strong
+                        className="portfolio-row-title-text"
+                        style={{
+                          color: isExpanded ? "var(--accent)" : "var(--fg-strong)",
+                          textDecoration: "underline",
+                          textDecorationColor: isExpanded ? "var(--accent)" : "transparent",
+                          textUnderlineOffset: "3px",
+                          transition: "color 0.15s ease, text-decoration-color 0.15s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isExpanded) {
+                            e.currentTarget.style.color = "var(--accent)";
+                            e.currentTarget.style.textDecorationColor = "var(--accent)";
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isExpanded) {
+                            e.currentTarget.style.color = "var(--fg-strong)";
+                            e.currentTarget.style.textDecorationColor = "transparent";
+                          }
+                        }}
+                      >
+                        {project.name}
+                      </strong>
+                    </button>
+                    <span className="portfolio-row-sep">·</span>
+                    <span className="portfolio-row-desc-desktop">
+                      {project.tagline}
+                    </span>
+                  </div>
+
+                  {/* Right: Live / Code with timeline silkscreen font */}
+                  <div className="portfolio-row-actions font-silkscreen">
+                    {project.liveUrl && !project.liveUrl.includes("github.com") && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-hover"
+                      >
+                        {project.liveUrl.includes("Soon") ? "Soon" : "Live"}
+                      </a>
+                    )}
+
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="View GitHub Repository"
+                        className="link-hover"
+                      >
+                        Code
+                      </a>
+                    )}
+                  </div>
                 </div>
 
-                {/* Right: Live / Code with timeline silkscreen font */}
-                <div
-                  className="font-silkscreen"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    flexShrink: 0,
-                    fontSize: "0.6875rem",
-                  }}
-                >
-                  {project.liveUrl && !project.liveUrl.includes("github.com") && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="link-hover"
-                    >
-                      {project.liveUrl.includes("Soon") ? "Soon" : "Live"}
-                    </a>
-                  )}
-
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title="View GitHub Repository"
-                      className="link-hover"
-                    >
-                      Code
-                    </a>
-                  )}
+                {/* Mobile Tagline (clean, readable, and non-cramped underneath on phone) */}
+                <div className="portfolio-row-desc-mobile">
+                  {project.tagline}
                 </div>
               </div>
 
