@@ -32,6 +32,7 @@ export function WorkSection() {
           return (
             <div
               key={item.id}
+              className="work-row-container"
               style={{
                 borderRadius: "var(--radius-sm)",
                 transition: "var(--transition)",
@@ -46,7 +47,7 @@ export function WorkSection() {
                 type="button"
                 onClick={() => toggleExpand(item.id)}
                 aria-expanded={isExpanded}
-                className={isExpanded ? "" : "hover-row"}
+                className={`work-row-header ${isExpanded ? "" : "hover-row"}`}
                 style={{
                   width: "100%",
                   textAlign: "left",
