@@ -48,6 +48,7 @@ export function ClientWorkSection() {
           return (
             <div
               key={project.id}
+              className="portfolio-row-container"
               style={{
                 borderRadius: "var(--radius-sm)",
                 transition: "var(--transition)",
@@ -62,71 +63,53 @@ export function ClientWorkSection() {
                 type="button"
                 onClick={() => toggleExpand(project.id)}
                 aria-expanded={isExpanded}
-                className={isExpanded ? "" : "hover-row"}
+                className={`portfolio-row-header ${isExpanded ? "" : "hover-row"}`}
                 style={{
                   width: "100%",
                   textAlign: "left",
-                  padding: "0.18rem 0.5rem",
-                  display: "flex",
-                  alignItems: "baseline",
-                  justifyContent: "space-between",
-                  gap: "1.25rem",
                   cursor: "pointer",
                   border: "none",
                   background: "transparent",
                   color: "inherit",
                 }}
               >
-                {/* Left: Project Name · Description */}
-                <div
-                  style={{
-                    fontSize: "0.875rem",
-                    color: "var(--fg-muted)",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    flex: "0 1 auto",
-                    fontWeight: 300,
-                    lineHeight: 1.5,
-                  }}
-                >
-                  <strong style={{ color: "var(--fg-strong)", fontWeight: 500 }}>
-                    {project.name}
-                  </strong>
-                  <span style={{ color: "var(--fg-subtle)", margin: "0 0.35rem" }}>
-                    ·
-                  </span>
-                  <span style={{ color: "var(--fg-muted)" }}>
-                    {project.tagline}
-                  </span>
+                <div className="portfolio-row-top">
+                  {/* Left: Project Name · Description */}
+                  <div className="portfolio-row-main">
+                    <strong className="portfolio-row-title-text">
+                      {project.name}
+                    </strong>
+                    <span className="portfolio-row-sep">
+                      ·
+                    </span>
+                    <span className="portfolio-row-desc-desktop">
+                      {project.tagline}
+                    </span>
+                  </div>
+
+                  {/* Right: Sold Price Pill */}
+                  <div className="portfolio-row-actions">
+                    {project.soldPrice && (
+                      <span
+                        className="font-silkscreen"
+                        style={{
+                          fontSize: "0.6875rem",
+                          color: "var(--green)",
+                          backgroundColor: "rgba(16, 185, 129, 0.12)",
+                          padding: "0.15rem 0.5rem",
+                          borderRadius: "4px",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        Sold for {project.soldPrice}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
-                {/* Right: Sold Price Pill */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    flexShrink: 0,
-                    fontSize: "0.78125rem",
-                    fontWeight: 300,
-                  }}
-                >
-                  {project.soldPrice && (
-                    <span
-                      className="font-silkscreen"
-                      style={{
-                        fontSize: "0.6875rem",
-                        color: "var(--green)",
-                        backgroundColor: "rgba(16, 185, 129, 0.12)",
-                        padding: "0.15rem 0.5rem",
-                        borderRadius: "4px",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      Sold for {project.soldPrice}
-                    </span>
-                  )}
+                {/* Mobile Tagline (clean, readable underneath on mobile) */}
+                <div className="portfolio-row-desc-mobile">
+                  {project.tagline}
                 </div>
               </button>
 
