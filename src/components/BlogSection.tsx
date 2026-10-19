@@ -52,7 +52,7 @@ export function BlogSection() {
                 cursor: "pointer",
                 transition: "background-color 0.15s ease",
               }}
-              className="hover-row"
+              className="hover-row portfolio-row-header"
             >
               {/* Left: Title & read time */}
               <div
