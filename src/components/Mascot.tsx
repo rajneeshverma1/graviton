@@ -18,7 +18,7 @@ export function Mascot({ size = 44, style }: MascotProps = {}) {
   return (
     <button
       type="button"
-      className="mascot-btn"
+      className="mascot-btn touch-manipulation"
       onClick={handleClick}
       aria-label="Rajneesh's Mascot"
       title="Click me! 🐇"
