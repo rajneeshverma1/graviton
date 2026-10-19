@@ -489,3 +489,137 @@ button {
   }
 }
 
+/* ==========================================================================
+   Responsive List Rows (Projects, Client Work, Experience)
+   ========================================================================== */
+
+/* Desktop defaults */
+.portfolio-row-header {
+  padding: 0.22rem 0.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.portfolio-row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1.25rem;
+}
+
+.portfolio-row-main {
+  font-size: 0.875rem;
+  color: var(--fg-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 0 1 auto;
+  line-height: 1.5;
+}
+
+.portfolio-row-title-text {
+  color: var(--fg-strong);
+  font-weight: 500;
+}
+
+.portfolio-row-sep {
+  display: inline;
+  color: var(--fg-subtle);
+  margin: 0 0.35rem;
+}
+
+.portfolio-row-desc-desktop {
+  display: inline;
+  color: var(--fg-muted);
+}
+
+.portfolio-row-desc-mobile {
+  display: none;
+}
+
+.portfolio-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+}
+
+/* Mobile Screens (< 640px) */
+@media (max-width: 640px) {
+  .portfolio-row-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.3rem;
+    padding: 0.65rem 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .portfolio-row-container:last-child .portfolio-row-header {
+    border-bottom: none;
+  }
+
+  .portfolio-row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .portfolio-row-main {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .portfolio-row-title-text {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  /* Hide single-line desktop tagline & dot on mobile */
+  .portfolio-row-sep,
+  .portfolio-row-desc-desktop {
+    display: none !important;
+  }
+
+  /* Show dedicated readable tagline underneath on mobile */
+  .portfolio-row-desc-mobile {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--fg-muted);
+    line-height: 1.45;
+    white-space: normal;
+    margin-top: 0.05rem;
+  }
+
+  .portfolio-row-actions {
+    font-size: 0.6875rem;
+    gap: 0.65rem;
+  }
+
+  /* Work Experience Mobile Enhancement */
+  .work-row-header {
+    padding: 0.6rem 0.5rem !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.35rem !important;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .work-row-container:last-child .work-row-header {
+    border-bottom: none;
+  }
+}
+
