@@ -142,3 +142,8 @@ npm start
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+
+### 📱 Mobile Responsiveness & Polish
+- Adaptive list rows for Projects & Client Work to prevent tagline truncation.
+- Touch-friendly action badges and comfortable vertical tap targets.
+- Responsive offscreen photography grid adapting from 5-item desktop filmstrip to 3x2 mobile cards.
