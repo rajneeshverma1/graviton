@@ -27,6 +27,18 @@ export const metadata: Metadata = {
       "21 y/o tech enthusiast, OS contributor, hobbyist developer and tinkerer from Lucknow, India.",
     type: "website",
     locale: "en_US",
+    siteName: "Rajneesh Verma Portfolio",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   twitter: {
     card: "summary_large_image",
