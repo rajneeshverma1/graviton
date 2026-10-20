@@ -50,6 +50,7 @@ export function Bio() {
           href={portfolioData.resumeUrl}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="View Rajneesh Verma Resume"
           style={{
             display: "inline-flex",
             alignItems: "center",
