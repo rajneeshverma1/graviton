@@ -9,7 +9,7 @@ A high-craft, editorial developer portfolio and digital garden engineered for sp
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-[**Explore Live Demo ↗**](http://localhost:3001) · [**Report Issue ↗**](https://github.com/rajneeshverma1/graviton/issues) · [**Connect on X ↗**](https://x.com/Rajneeshvermaa)
+[**GitHub Profile ↗**](https://github.com/rajneeshverma1) · [**Report Issue ↗**](https://github.com/rajneeshverma1/graviton/issues) · [**Connect on X ↗**](https://x.com/Rajneeshvermaa)
 
 </div>
 
