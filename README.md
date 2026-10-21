@@ -29,8 +29,9 @@ A high-craft, editorial developer portfolio and digital garden engineered for sp
 - **💰 Client Work & Commercial Exits**: Verified commercial deliverables and SaaS platforms with acquisition values and architecture details.
 - **📊 52-Week GitHub Contribution Heatmap**:
   - Authentic multi-year heatmap (2026, 2025, 2024) with authentic GitHub level color tokens.
-  - Interactive day-by-day hover tooltips with exact contribution counts and dates.
+  - Interactive day-by-day hover tooltips with exact contribution counts, dynamic date tracking, and contrast accessibility.
   - Contribution settings dropdown with private commits toggle.
+- **♿ First-Class Accessibility & Keyboard Navigation**: WCAG-compliant touch targets, accessible role labels, and tactile keyboard handlers.
 - **📝 Digital Garden & Essays**: Clean blog section with read-time estimators and technical essays on engineering and systems.
 - **🕉️ Bhagavad Gita Wisdom Card**: Philosophical quote card rendered with handwritten script typography.
 - **🔤 Responsive Full-Width Brand Signature**: Pixel-perfect lowercase (`rajneesh verma`) brand block with scalable SVG proportions matching the quote card boundary.
