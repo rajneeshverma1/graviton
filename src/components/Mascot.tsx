@@ -15,11 +15,19 @@ export function Mascot({ size = 44, style }: MascotProps = {}) {
     setTimeout(() => setClicked(false), 800);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   return (
     <button
       type="button"
       className="mascot-btn touch-manipulation"
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       aria-label="Rajneesh's Mascot"
       title="Click me! 🐇"
       style={{
