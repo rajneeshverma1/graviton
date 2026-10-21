@@ -24,6 +24,8 @@ export function OpenSourceSection() {
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`View ${item.name} repository`}
+              title={`View ${item.name} contribution`}
               className="hover-row"
               style={{
                 margin: "0 -0.5rem",
