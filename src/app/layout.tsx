@@ -28,6 +28,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Rajneesh Verma Portfolio",
+    url: "https://rajneeshportfolio.vercel.app",
+  },
+  alternates: {
+    canonical: "/",
   },
   robots: {
     index: true,
