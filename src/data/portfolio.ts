@@ -356,8 +356,8 @@ export const portfolioData = {
   ] as Hackathon[],
 
   githubActivity: {
-    totalContributions: 2402,
-    yearText: "2,402 contributions in the last year",
+    totalContributions: 2451,
+    yearText: "2,451 contributions in the last year",
   },
 
   articles: [
