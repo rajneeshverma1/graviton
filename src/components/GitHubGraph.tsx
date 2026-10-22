@@ -11,6 +11,14 @@ interface RawDay {
   level: number;
 }
 
+// Private contribution simulation offset per year
+const privateOffsets: Record<string, number> = {
+  last: 67, // bumps ~2335 / 2402 to actual total
+  "2026": 67, // 2335 + 67 = 2,402
+  "2025": 45,
+  "2024": 15,
+};
+
 export function GitHubGraph() {
   const [selectedYear, setSelectedYear] = useState<"last" | "2026" | "2025" | "2024">("2026");
   const [includePrivate, setIncludePrivate] = useState<boolean>(true);
@@ -38,26 +46,48 @@ export function GitHubGraph() {
     };
   }, [settingsOpen]);
 
-  // Private contribution simulation offset per year
-  const privateOffsets: Record<string, number> = {
-    last: 67, // bumps ~2335 / 2402 to actual total
-    "2026": 67, // 2335 + 67 = 2,402
-    "2025": 45,
-    "2024": 15,
-  };
+  const [dataPayload, setDataPayload] = useState<{
+    contributions: RawDay[];
+    lastYearContributions: RawDay[];
+    isLive: boolean;
+  }>({
+    contributions: rawAllContributions.contributions as RawDay[],
+    lastYearContributions: rawLastYear.contributions as RawDay[],
+    isLive: false,
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch("/api/github")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!isMounted || !data) return;
+        if (data.contributions) {
+          setDataPayload({
+            contributions: data.contributions,
+            lastYearContributions: data.lastYearContributions || (rawLastYear.contributions as RawDay[]),
+            isLive: data.source === "live",
+          });
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Filter raw data based on selected year
   const rawDays: RawDay[] = useMemo(() => {
     if (selectedYear === "last") {
-      return (rawLastYear.contributions || []) as RawDay[];
+      return (dataPayload.lastYearContributions || []) as RawDay[];
     }
-    const all = (rawAllContributions.contributions || []) as RawDay[];
+    const all = (dataPayload.contributions || []) as RawDay[];
     // Filter days belonging to the chosen year, sorted ascending by date
     const filtered = all
       .filter((d) => d.date.startsWith(selectedYear))
       .sort((a, b) => a.date.localeCompare(b.date));
     return filtered;
-  }, [selectedYear]);
+  }, [selectedYear, dataPayload]);
 
   // Compute total contributions
   const totalCount = useMemo(() => {
@@ -129,22 +159,51 @@ export function GitHubGraph() {
           GitHub Contributions
         </h2>
 
-        <a
-          href={portfolioData.socials.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            fontSize: "0.78125rem",
-            color: "var(--fg-subtle)",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.25rem",
-          }}
-          className="link-hover"
-        >
-          <span>@rajneeshverma1</span>
-          <span>↗</span>
-        </a>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+          {dataPayload.isLive && (
+            <span
+              style={{
+                fontSize: "0.6875rem",
+                color: "var(--green)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.3rem",
+                padding: "0.1rem 0.45rem",
+                borderRadius: "12px",
+                backgroundColor: "rgba(52, 211, 153, 0.1)",
+                border: "1px solid rgba(52, 211, 153, 0.25)",
+              }}
+              title="Real-time live sync with GitHub"
+            >
+              <span
+                style={{
+                  width: "5px",
+                  height: "5px",
+                  borderRadius: "50%",
+                  backgroundColor: "var(--green)",
+                  display: "inline-block",
+                }}
+              />
+              Live GitHub
+            </span>
+          )}
+          <a
+            href={portfolioData.socials.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: "0.78125rem",
+              color: "var(--fg-subtle)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.25rem",
+            }}
+            className="link-hover"
+          >
+            <span>@rajneeshverma1</span>
+            <span>↗</span>
+          </a>
+        </div>
       </div>
 
       {/* Official GitHub Calendar Card (Only green box) */}
@@ -195,7 +254,7 @@ export function GitHubGraph() {
                 <button
                   key={tab.id}
                   type="button"
-                  onClick={() => setSelectedYear(tab.id as any)}
+                  onClick={() => setSelectedYear(tab.id as "last" | "2026" | "2025" | "2024")}
                   style={{
                     padding: "0.12rem 0.45rem",
                     borderRadius: "3px",
