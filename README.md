@@ -29,6 +29,8 @@ A high-craft, editorial developer portfolio and digital garden engineered for sp
 - **💰 Client Work & Commercial Exits**: Verified commercial deliverables and SaaS platforms with acquisition values and architecture details.
 - **📊 52-Week GitHub Contribution Heatmap**:
   - Authentic multi-year heatmap (2026, 2025, 2024) with authentic GitHub level color tokens.
+  - **Dynamic Real-Time Sync**: Server-side `/api/github` integration with live GitHub scraper and REST events API with instant fallback.
+  - **Live Status Indicator**: Subtle badge displaying real-time live synchronization with [@rajneeshverma1](https://github.com/rajneeshverma1).
   - Interactive day-by-day hover tooltips with exact contribution counts, dynamic date tracking, and contrast accessibility.
   - Contribution settings dropdown with private commits toggle.
 - **♿ First-Class Accessibility & Keyboard Navigation**: WCAG-compliant touch targets, accessible role labels, and tactile keyboard handlers.
