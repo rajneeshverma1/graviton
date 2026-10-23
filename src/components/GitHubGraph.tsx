@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useEffect, useRef } from "react";
+import React, { useMemo, useState, useEffect, useRef, useCallback } from "react";
 import { portfolioData } from "@/data/portfolio";
 import rawAllContributions from "@/data/github-contributions.json";
 import rawLastYear from "@/data/github-last-year.json";
@@ -23,6 +23,7 @@ export function GitHubGraph() {
   const [selectedYear, setSelectedYear] = useState<"last" | "2026" | "2025" | "2024">("2026");
   const [includePrivate, setIncludePrivate] = useState<boolean>(true);
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [hoveredCell, setHoveredCell] = useState<{
@@ -56,12 +57,12 @@ export function GitHubGraph() {
     isLive: false,
   });
 
-  useEffect(() => {
-    let isMounted = true;
-    fetch("/api/github")
+  const loadData = useCallback(() => {
+    setIsSyncing(true);
+    fetch(`/api/github?t=${Date.now()}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (!isMounted || !data) return;
+        if (!data) return;
         if (data.contributions) {
           setDataPayload({
             contributions: data.contributions,
@@ -70,11 +71,27 @@ export function GitHubGraph() {
           });
         }
       })
-      .catch(() => {});
-    return () => {
-      isMounted = false;
-    };
+      .catch(() => {})
+      .finally(() => {
+        setIsSyncing(false);
+      });
   }, []);
+
+  useEffect(() => {
+    loadData();
+
+    // Re-sync whenever user comes back to the tab
+    const handleFocus = () => loadData();
+    window.addEventListener("focus", handleFocus);
+
+    // Auto re-sync every 60 seconds
+    const interval = setInterval(loadData, 60000);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      clearInterval(interval);
+    };
+  }, [loadData]);
 
   // Filter raw data based on selected year
   const rawDays: RawDay[] = useMemo(() => {
@@ -160,33 +177,38 @@ export function GitHubGraph() {
         </h2>
 
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-          {dataPayload.isLive && (
+          <button
+            type="button"
+            onClick={() => loadData()}
+            disabled={isSyncing}
+            style={{
+              fontSize: "0.6875rem",
+              color: "var(--green)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.3rem",
+              padding: "0.15rem 0.5rem",
+              borderRadius: "12px",
+              backgroundColor: "rgba(52, 211, 153, 0.1)",
+              border: "1px solid rgba(52, 211, 153, 0.25)",
+              cursor: isSyncing ? "default" : "pointer",
+              transition: "all 0.2s ease",
+              opacity: isSyncing ? 0.7 : 1,
+            }}
+            title="Real-time live sync with GitHub (click to refresh)"
+          >
             <span
               style={{
-                fontSize: "0.6875rem",
-                color: "var(--green)",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.3rem",
-                padding: "0.1rem 0.45rem",
-                borderRadius: "12px",
-                backgroundColor: "rgba(52, 211, 153, 0.1)",
-                border: "1px solid rgba(52, 211, 153, 0.25)",
+                width: "5px",
+                height: "5px",
+                borderRadius: "50%",
+                backgroundColor: "var(--green)",
+                display: "inline-block",
+                boxShadow: isSyncing ? "0 0 6px var(--green)" : "none",
               }}
-              title="Real-time live sync with GitHub"
-            >
-              <span
-                style={{
-                  width: "5px",
-                  height: "5px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--green)",
-                  display: "inline-block",
-                }}
-              />
-              Live GitHub
-            </span>
-          )}
+            />
+            {isSyncing ? "Syncing..." : dataPayload.isLive ? "Live GitHub" : "Sync GitHub"}
+          </button>
           <a
             href={portfolioData.socials.github}
             target="_blank"

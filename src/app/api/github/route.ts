@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import rawAllContributions from "@/data/github-contributions.json";
 import rawLastYear from "@/data/github-last-year.json";
 
@@ -8,46 +8,116 @@ interface RawDay {
   level: number;
 }
 
+function parseGitHubContributionsHtml(html: string): { total: number; days: RawDay[] } {
+  const totalMatch = html.match(/id="js-contribution-activity-description"[^>]*>\s*([0-9,]+)\s*contributions/);
+  const total = totalMatch ? parseInt(totalMatch[1].replace(/,/g, ""), 10) : 0;
 
-export async function GET() {
+  const tooltips = new Map<string, string>();
+  const ttRegex = /<tool-tip[^>]*for="([^"]+)"[^>]*>([\s\S]*?)<\/tool-tip>/g;
+  let ttMatch: RegExpExecArray | null;
+  while ((ttMatch = ttRegex.exec(html)) !== null) {
+    tooltips.set(ttMatch[1], ttMatch[2].trim());
+  }
+
+  const dayRegex = /<td[^>]*data-date="(\d{4}-\d{2}-\d{2})"[^>]*id="([^"]+)"[^>]*data-level="(\d+)"/g;
+  let dayMatch: RegExpExecArray | null;
+  const days: RawDay[] = [];
+  while ((dayMatch = dayRegex.exec(html)) !== null) {
+    const [, date, id, levelStr] = dayMatch;
+    const ttText = tooltips.get(id) || "";
+    let count = 0;
+    const countMatch = ttText.match(/^([0-9,]+)\s+contribution/);
+    if (countMatch) {
+      count = parseInt(countMatch[1].replace(/,/g, ""), 10);
+    }
+    days.push({ date, count, level: parseInt(levelStr, 10) });
+  }
+
+  return { total, days };
+}
+
+export async function GET(request: NextRequest) {
+  const responseHeaders = {
+    "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
+  };
+
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
 
-    // Fetch live contributions from the GitHub scraper API
-    const contribPromise = fetch("https://github-contributions-api.jogruber.de/v4/rajneeshverma1", {
-      signal: controller.signal,
-      next: { revalidate: 300 }, // cache for 5 minutes
-    }).then((res) => (res.ok ? res.json() : null)).catch(() => null);
+    const headers = {
+      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)",
+      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    };
 
-    // Fetch recent events from GitHub REST API
+    // Fetch official GitHub contribution HTML directly
+    const year2026Promise = fetch(
+      "https://github.com/users/rajneeshverma1/contributions?from=2026-01-01&to=2026-12-31",
+      {
+        headers,
+        signal: controller.signal,
+        cache: "no-store",
+      }
+    )
+      .then((res) => (res.ok ? res.text() : null))
+      .catch(() => null);
+
+    const lastYearPromise = fetch(
+      "https://github.com/users/rajneeshverma1/contributions",
+      {
+        headers,
+        signal: controller.signal,
+        cache: "no-store",
+      }
+    )
+      .then((res) => (res.ok ? res.text() : null))
+      .catch(() => null);
+
+    // Fetch recent events from GitHub REST API for instant commit reflection
     const eventsPromise = fetch("https://api.github.com/users/rajneeshverma1/events", {
       headers: { "User-Agent": "rajneeshportfolio" },
       signal: controller.signal,
-      next: { revalidate: 180 }, // cache for 3 minutes
-    }).then((res) => (res.ok ? res.json() : null)).catch(() => null);
+      cache: "no-store",
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .catch(() => null);
 
-    const [liveData, events] = await Promise.all([contribPromise, eventsPromise]);
+    const [html2026, htmlLastYear, events] = await Promise.all([
+      year2026Promise,
+      lastYearPromise,
+      eventsPromise,
+    ]);
     clearTimeout(timeoutId);
 
-    if (!liveData || !liveData.contributions) {
-      // Return local fallback with our latest counts
-      return NextResponse.json({
-        source: "local",
-        total: rawAllContributions.total,
-        contributions: rawAllContributions.contributions,
-        lastYearTotal: rawLastYear.total.lastYear,
-        lastYearContributions: rawLastYear.contributions,
-      });
+    const parsed2026 = html2026 ? parseGitHubContributionsHtml(html2026) : null;
+    const parsedLastYear = htmlLastYear ? parseGitHubContributionsHtml(htmlLastYear) : null;
+
+    if (!parsed2026 || parsed2026.days.length === 0) {
+      // Direct fetch failed, return fresh local fallback
+      return NextResponse.json(
+        {
+          source: "local",
+          total: rawAllContributions.total,
+          contributions: rawAllContributions.contributions,
+          lastYearTotal: rawLastYear.total.lastYear,
+          lastYearContributions: rawLastYear.contributions,
+        },
+        { headers: responseHeaders }
+      );
     }
 
-    // Process live contributions
+    // Populate base map with all historical days from JSON (2024, 2025, 2026)
     const contributionsMap = new Map<string, RawDay>();
-    for (const item of (liveData.contributions || []) as RawDay[]) {
+    for (const item of (rawAllContributions.contributions || []) as RawDay[]) {
       contributionsMap.set(item.date, { ...item });
     }
 
-    // Merge recent commit events from GitHub
+    // Overwrite with live 2026 days directly from GitHub
+    for (const item of parsed2026.days) {
+      contributionsMap.set(item.date, item);
+    }
+
+    // Merge recent push events from GitHub REST API
     if (Array.isArray(events)) {
       for (const ev of events) {
         if (ev.created_at) {
@@ -55,26 +125,13 @@ export async function GET() {
           const commitCount = ev.payload?.commits?.length || (ev.type === "PushEvent" ? 1 : 0);
           if (commitCount > 0 && contributionsMap.has(date)) {
             const existing = contributionsMap.get(date)!;
-            // Ensure at least this number of commits is counted
             if (existing.count < commitCount) {
               existing.count = commitCount;
-              existing.level = commitCount >= 10 ? 3 : commitCount >= 4 ? 2 : 1;
+              existing.level = commitCount >= 10 ? 4 : commitCount >= 6 ? 3 : commitCount >= 3 ? 2 : 1;
             }
           }
         }
       }
-    }
-
-    // Ensure October 21 and 22 reflect our verified commits
-    const oct21 = contributionsMap.get("2026-10-21");
-    if (oct21) {
-      oct21.count = Math.max(oct21.count, 15);
-      oct21.level = Math.max(oct21.level, 3);
-    }
-    const oct22 = contributionsMap.get("2026-10-22");
-    if (oct22) {
-      oct22.count = Math.max(oct22.count, 5);
-      oct22.level = Math.max(oct22.level, 2);
     }
 
     const mergedContributions = Array.from(contributionsMap.values());
@@ -82,23 +139,35 @@ export async function GET() {
       .filter((d) => d.date.startsWith("2026"))
       .reduce((sum, d) => sum + d.count, 0);
 
-    return NextResponse.json({
-      source: "live",
-      total: {
-        ...liveData.total,
-        "2026": Math.max(liveData.total?.["2026"] || 0, year2026Total),
+    const lastYearDays = parsedLastYear?.days?.length
+      ? parsedLastYear.days
+      : (rawLastYear.contributions as RawDay[]);
+    const lastYearTotal = parsedLastYear?.total || rawLastYear.total.lastYear;
+
+    return NextResponse.json(
+      {
+        source: "live",
+        total: {
+          ...rawAllContributions.total,
+          "2026": Math.max(parsed2026.total, year2026Total),
+        },
+        contributions: mergedContributions,
+        lastYearTotal,
+        lastYearContributions: lastYearDays,
       },
-      contributions: mergedContributions,
-      lastYearTotal: rawLastYear.total.lastYear,
-      lastYearContributions: rawLastYear.contributions,
-    });
+      { headers: responseHeaders }
+    );
   } catch {
-    return NextResponse.json({
-      source: "local-fallback",
-      total: rawAllContributions.total,
-      contributions: rawAllContributions.contributions,
-      lastYearTotal: rawLastYear.total.lastYear,
-      lastYearContributions: rawLastYear.contributions,
-    });
+    return NextResponse.json(
+      {
+        source: "local-fallback",
+        total: rawAllContributions.total,
+        contributions: rawAllContributions.contributions,
+        lastYearTotal: rawLastYear.total.lastYear,
+        lastYearContributions: rawLastYear.contributions,
+      },
+      { headers: responseHeaders }
+    );
   }
 }
+
